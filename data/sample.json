@@ -1,0 +1,162 @@
+[
+  {
+    "id": 890730384,
+    "name": "r1",
+    "interfaces": [
+      {
+        "address": "192.168.1.1",
+        "mask": "24"
+      }
+    ],
+    "broadcastedNetworks": [
+      {
+        "address": "192.168.1.0",
+        "mask": "24"
+      }
+    ]
+  },
+  {
+    "id": 469075949,
+    "name": "r2",
+    "interfaces": [
+      {
+        "address": "192.168.2.2",
+        "mask": "24"
+      },
+      {
+        "address": "192.168.6.2",
+        "mask": "24"
+      }
+    ],
+    "broadcastedNetworks": [
+      {
+        "address": "192.168.2.0",
+        "mask": "24"
+      },
+      {
+        "address": "192.168.6.0",
+        "mask": "24"
+      }
+    ]
+  },
+  {
+    "id": 43677162,
+    "name": "r3",
+    "interfaces": [
+      {
+        "address": "192.168.7.3",
+        "mask": "24"
+      }
+    ],
+    "broadcastedNetworks": [
+      {
+        "address": "192.168.7.0",
+        "mask": "24"
+      }
+    ]
+  },
+  {
+    "id": 751125538,
+    "name": "r4",
+    "interfaces": [
+      {
+        "address": "192.168.4.4",
+        "mask": "24"
+      },
+      {
+        "address": "192.168.5.4",
+        "mask": "24"
+      },
+      {
+        "address": "192.168.6.4",
+        "mask": "24"
+      },
+      {
+        "address": "192.168.7.4",
+        "mask": "24"
+      }
+    ],
+    "broadcastedNetworks": [
+      {
+        "address": "192.168.4.0",
+        "mask": "24"
+      },
+      {
+        "address": "192.168.5.0",
+        "mask": "24"
+      },
+      {
+        "address": "192.168.6.0",
+        "mask": "24"
+      },
+      {
+        "address": "192.168.7.0",
+        "mask": "24"
+      }
+    ]
+  },
+  {
+    "id": 600994010,
+    "name": "r5",
+    "interfaces": [
+      {
+        "address": "192.168.3.5",
+        "mask": "24"
+      },
+      {
+        "address": "192.168.5.5",
+        "mask": "24"
+      }
+    ],
+    "broadcastedNetworks": [
+      {
+        "address": "192.168.3.0",
+        "mask": "24"
+      },
+      {
+        "address": "192.168.5.0",
+        "mask": "24"
+      }
+    ]
+  },
+  {
+    "id": 504544744,
+    "name": "r6",
+    "interfaces": [
+      {
+        "address": "192.168.1.6",
+        "mask": "24"
+      },
+      {
+        "address": "192.168.2.6",
+        "mask": "24"
+      },
+      {
+        "address": "192.168.3.6",
+        "mask": "24"
+      },
+      {
+        "address": "192.168.4.6",
+        "mask": "24"
+      }
+    ],
+    "broadcastedNetworks": [
+      {
+        "address": "192.168.1.0",
+        "mask": "24"
+      },
+      {
+        "address": "192.168.2.0",
+        "mask": "24"
+      },
+      {
+        "address": "192.168.3.0",
+        "mask": "24"
+      },
+      {
+        "address": "192.168.4.0",
+        "mask": "24"
+      }
+    ]
+  }
+]
