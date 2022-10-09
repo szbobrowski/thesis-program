@@ -5,8 +5,8 @@ import graph_creator
 import graphs_example_data
 
 def main():
-    # vertices, edges = graph_creator.main()
-    vertices, edges = graphs_example_data.main()
+    vertices, edges = graph_creator.main()
+    # vertices, edges = graphs_example_data.main()
     source_vertex = vertices[0]
     vertices_with_distances = set_initial_distances(source_vertex, vertices)
     vertices_with_successors = determine_successors(vertices, edges)

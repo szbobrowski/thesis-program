@@ -36,39 +36,25 @@ def create_single_router(min_num_of_interfaces, max_num_of_interfaces, network_a
     number_of_interfaces = random.randint(min_num_of_interfaces, max_num_of_interfaces)
     broadcasted_networks_addresses = random.sample(network_addresses, number_of_interfaces)
 
-    interfaces = create_interfaces(broadcasted_networks_addresses)
     broadcasted_networks = create_broadcasted_networks(broadcasted_networks_addresses)
     
     router = {
         'id': id,
         'name': name,
-        'interfaces': interfaces,
         'broadcastedNetworks': broadcasted_networks
     }
 
+    print(router)
+
     return router
-
-def create_interfaces(broadcasted_networks_addresses):
-    interfaces = []
-    for address in broadcasted_networks_addresses:
-        last_octet = random.randint(1, 255)
-        interface_address = address[:len(address) - 1] + str(last_octet)
-
-        interface = {
-            'address': interface_address,
-            'mask': 24
-        }
-
-        interfaces.append(interface)
-
-    return interfaces
 
 def create_broadcasted_networks(broadcasted_networks_addresses):
     broadcasted_networks = []
+    bandwidth = random.randint(1, 10)
     for address in broadcasted_networks_addresses:
         broadcasted_networks.append({
             'address': address,
-            'mask': 24
+            'bandwidth': bandwidth
         })
 
     return broadcasted_networks
