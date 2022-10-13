@@ -1,25 +1,39 @@
 import sys
+import time
 sys.path.insert(1, '../data')
 
 import graph_creator
-import graphs_example_data
 
 def main():
-    # vertices, edges = graph_creator.main()
-    vertices, edges = graphs_example_data.main()
+    vertices, edges = graph_creator.main()
     final_matrix = calculate_distances(vertices, edges)
     
-    for vertex in vertices:
-        print(vertex, final_matrix[vertex])
-    
 def calculate_distances(vertices, edges):
+    start = time.time()
     vertices_with_dummy, edges_with_dummy = add_new_vertex(vertices, edges)
-    reweighted_values = run_bellman_ford(vertices_with_dummy, edges_with_dummy, vertices_with_dummy[0])
-    reweighted_edges = reweight_edges(edges, reweighted_values)
-    matrix_before_reweight = run_dijkstra(vertices, reweighted_edges)
-    final_matrix = reweight_edges_back(matrix_before_reweight, reweighted_values)
+    end = time.time()
+    execution_time = end - start
 
-    return final_matrix
+    reweighted_values, time_to_add = run_bellman_ford(vertices_with_dummy, edges_with_dummy, vertices_with_dummy[0])
+    execution_time += time_to_add
+
+    start = time.time()
+    reweighted_edges = reweight_edges(edges, reweighted_values)
+    end = time.time()
+
+    execution_time += (end - start)
+
+    matrix_before_reweight, time_to_add = run_dijkstra(vertices, reweighted_edges)
+    execution_time += time_to_add
+
+
+    start = time.time()
+    final_matrix = reweight_edges_back(matrix_before_reweight, reweighted_values)
+    end = time.time()
+
+    execution_time += (end - start)
+
+    return final_matrix, execution_time
 
 def add_new_vertex(vertices, edges):
     vertices_with_dummy = vertices[:]
@@ -53,9 +67,14 @@ def run_bellman_ford(vertices_with_dummy, edges_with_dummy, source_vertex):
     vertices_with_distances = set_initial_distances(source_vertex, vertices_with_dummy)
     vertices_with_predecessors = determine_predecessors(vertices_with_dummy, edges_with_dummy)
     full_vertices = merge_distances_and_predecessors(vertices_with_distances, vertices_with_predecessors)
+
+    start = time.time()
     vertices_with_calculated_distances = calculate_distances_with_bellman_ford(full_vertices)
     del vertices_with_calculated_distances['DUMMY_VERTEX']
-    return vertices_with_calculated_distances
+    end = time.time()
+    execution_time = end - start
+
+    return vertices_with_calculated_distances, execution_time
 
 def determine_predecessors(vertices, edges):
     vertices_with_predecessors = []
@@ -95,16 +114,21 @@ def run_dijkstra(vertices, reweighted_edges):
     matrix_before_reweight = {}
     vertices_copy = vertices[:]
 
+    execution_time = 0
+
     for i in range(len(vertices)):
         vertices_copy[0], vertices_copy[i] = vertices_copy[i], vertices_copy[0]
         source_vertex = vertices_copy[0]
         vertices_with_distances = set_initial_distances(source_vertex, vertices_copy)
         vertices_with_successors = determine_successors(vertices_copy, reweighted_edges)
         full_vertices = merge_distances_and_successors(vertices_with_distances, vertices_with_successors)
+        start = time.time()
         vertices_with_calculated_distances = calculate_distances_with_dijkstra(full_vertices)
+        end = time.time()
+        execution_time += (end - start)
         matrix_before_reweight[source_vertex] = vertices_with_calculated_distances
 
-    return matrix_before_reweight
+    return matrix_before_reweight, execution_time
         
 
 def set_initial_distances(source_vertex, vertices):
@@ -178,5 +202,3 @@ def find_vertex_with_min_dist(full_vertices, visited):
             min_vertex = vertex
 
     return min_vertex
-
-main()

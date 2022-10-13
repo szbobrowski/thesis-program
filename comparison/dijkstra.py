@@ -13,8 +13,6 @@ def main():
     full_vertices = merge_distances_and_successors(vertices_with_distances, vertices_with_successors)
     vertices_with_calculated_distances = calculate_distances(full_vertices)
     vertices_paths = discover_paths(vertices_with_calculated_distances, source_vertex)
-    # print('\ndistances', vertices_with_calculated_distances)
-    # print('\npaths', vertices_paths)
 
 def set_initial_distances(source_vertex, vertices):
     vertices_with_distances = []

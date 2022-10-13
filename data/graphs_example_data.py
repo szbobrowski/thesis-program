@@ -1,5 +1,5 @@
 def main():
-    vertices, edges = get_example_1()
+    vertices, edges = get_example_3()
     return vertices, edges
 
 def get_example_1():
