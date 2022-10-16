@@ -10,22 +10,30 @@ def main():
 
 def run_link_state(neighbors_list):
     databases = {}
+    for router in neighbors_list:
+        nodes = add_vertices_info_to_database(router, neighbors_list[router])
+        database_info = add_edges_info_to_database(router, neighbors_list[router])
+
+        databases[router] = [nodes, database_info]
+
+        dijkstra.main(databases[router][0], databases[router][1], router)
+
     for first_router in neighbors_list:
         nodes = []
         database_info = []
         for second_router in neighbors_list:
-            database_info += add_edges_info_to_database(second_router, neighbors_list[second_router])
-            nodes += add_vertices_info_to_database(second_router, neighbors_list[second_router])
+            nodes = add_vertices_info_to_database(first_router, neighbors_list[first_router])
+            database_info = add_edges_info_to_database(first_router, neighbors_list[first_router])
 
-            database_info = [list(x) for x in set(tuple(x) for x in database_info)]
-            nodes = uniquify_list(nodes)
+            databases[second_router][0] += nodes
+            databases[second_router][1] += database_info
+            databases[second_router][0] = uniquify_list(databases[second_router][0])
+            databases[second_router][1] = [list(x) for x in set(tuple(x) for x in databases[second_router][1])]
             
-            databases[first_router] = [nodes, database_info]
-            # dijkstra.main(databases[first_router][0], databases[first_router][1], first_router)
+            dijkstra.main(databases[second_router][0], databases[second_router][1], second_router)
 
     
-    # print(databases['r1'])
-    dijkstra.main(databases['r5'][0], databases['r5'][1], 'r5')
+    print(databases['r1'])
         
 
 def add_edges_info_to_database(node, router_propagation_info):
