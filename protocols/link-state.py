@@ -20,8 +20,12 @@ def run_link_state(neighbors_list):
             database_info = [list(x) for x in set(tuple(x) for x in database_info)]
             nodes = uniquify_list(nodes)
             
-            databases[second_router] = [nodes, database_info]
-            dijkstra.main(databases[first_router][0], databases[first_router][1], first_router)
+            databases[first_router] = [nodes, database_info]
+            # dijkstra.main(databases[first_router][0], databases[first_router][1], first_router)
+
+    
+    # print(databases['r1'])
+    dijkstra.main(databases['r5'][0], databases['r5'][1], 'r5')
         
 
 def add_edges_info_to_database(node, router_propagation_info):

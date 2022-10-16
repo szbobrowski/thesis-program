@@ -1,15 +1,19 @@
 import sys
+from traceback import print_tb
 sys.path.insert(1, '../data')
 
 def main(vertices, edges, source_vertex):
+    # print(vertices)
+    # print(edges)
+    # print(source_vertex)
     vertices_with_distances = set_initial_distances(source_vertex, vertices)
     vertices_with_successors = determine_successors(vertices, edges)
     full_vertices = merge_distances_and_successors(vertices_with_distances, vertices_with_successors)
     vertices_with_calculated_distances = calculate_distances(full_vertices)
     vertices_paths = discover_paths(vertices_with_calculated_distances, source_vertex)
 
-    # print('\ndistances', vertices_with_calculated_distances)
-    # print('\npaths', vertices_paths)
+    print('\ndistances', vertices_with_calculated_distances)
+    print('\npaths', vertices_paths)
 
 def set_initial_distances(source_vertex, vertices):
     vertices_with_distances = []
@@ -32,10 +36,19 @@ def determine_successors(vertices, edges):
 
     return vertices_with_successors
 
+# def merge_distances_and_successors(vertices_with_distances, vertices_with_successors):
+#     full_vertices = {}
+#     for dist_vertex, suc_vertex in zip(vertices_with_distances, vertices_with_successors):
+#         full_vertices[dist_vertex[0]] = {'distance': dist_vertex[1], 'successors': suc_vertex[1]}
+    
+#     return full_vertices
+
 def merge_distances_and_successors(vertices_with_distances, vertices_with_successors):
     full_vertices = {}
-    for dist_vertex, suc_vertex in zip(vertices_with_distances, vertices_with_successors):
-        full_vertices[dist_vertex[0]] = {'distance': dist_vertex[1], 'successors': suc_vertex[1]}
+    for dist_vertex in vertices_with_distances:
+        for suc_vertex in vertices_with_successors:
+            if dist_vertex[0] == suc_vertex[0]:
+                full_vertices[dist_vertex[0]] = {'distance': dist_vertex[1], 'successors': suc_vertex[1]}
     
     return full_vertices
 
