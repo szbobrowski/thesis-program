@@ -1,7 +1,5 @@
-from cProfile import run
 import json
-from operator import ne
-from platform import node
+import dijkstra
 
 def main():
     data = read_data_from_file()
@@ -13,24 +11,36 @@ def main():
 def run_link_state(neighbors_list):
     databases = {}
     for first_router in neighbors_list:
+        nodes = []
         database_info = []
         for second_router in neighbors_list:
-            database_info += add_info_to_database(second_router, neighbors_list[second_router])
+            database_info += add_edges_info_to_database(second_router, neighbors_list[second_router])
+            nodes += add_vertices_info_to_database(second_router, neighbors_list[second_router])
 
-        database_info = [list(x) for x in set(tuple(x) for x in database_info)]
-        databases[first_router] = database_info
+            database_info = [list(x) for x in set(tuple(x) for x in database_info)]
+            nodes = uniquify_list(nodes)
+            
+            databases[second_router] = [nodes, database_info]
+            dijkstra.main(databases[first_router][0], databases[first_router][1], first_router)
 
-    for router in databases:
-        print(router, databases[router])
+        break
+        
 
-
-def add_info_to_database(node, router_propagation_info):
+def add_edges_info_to_database(node, router_propagation_info):
     database_info = []
+    nodes = []
     for entry in router_propagation_info:
         database_info.append([node, entry[0], entry[1]])
         database_info.append([entry[0], node, entry[1]])
 
     return database_info
+
+def add_vertices_info_to_database(node, router_propagation_info):
+    nodes = []
+    for entry in router_propagation_info:
+        nodes += [node, entry[0]]
+
+    return nodes
 
 
 def read_data_from_file():
@@ -72,5 +82,11 @@ def pair_networks(first_router_networks, second_router_networks):
                     cost = max(int(first_router_network['bandwidth']), int(second_router_network['bandwidth']))
 
     return is_pair, cost
+
+def uniquify_list(the_list):
+    a_set = set(the_list)
+    uniquified_list = list(a_set)
+
+    return uniquified_list
 
 main()

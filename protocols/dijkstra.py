@@ -1,18 +1,13 @@
 import sys
 sys.path.insert(1, '../data')
 
-import graph_creator
-import graphs_example_data
-
-def main():
-    vertices, edges = graph_creator.main()
-    # vertices, edges = graphs_example_data.main()
-    source_vertex = vertices[0]
+def main(vertices, edges, source_vertex):
     vertices_with_distances = set_initial_distances(source_vertex, vertices)
     vertices_with_successors = determine_successors(vertices, edges)
     full_vertices = merge_distances_and_successors(vertices_with_distances, vertices_with_successors)
     vertices_with_calculated_distances = calculate_distances(full_vertices)
     vertices_paths = discover_paths(vertices_with_calculated_distances, source_vertex)
+
     print('\ndistances', vertices_with_calculated_distances)
     print('\npaths', vertices_paths)
 
@@ -108,5 +103,3 @@ def discover_paths(vertices_with_calculated_distances, source_vertex):
         vertices_paths.append({vertex: path})
 
     return vertices_paths
-
-main()
