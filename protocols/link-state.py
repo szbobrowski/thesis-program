@@ -22,13 +22,10 @@ def run_link_state(neighbors_list):
             
             databases[second_router] = [nodes, database_info]
             dijkstra.main(databases[first_router][0], databases[first_router][1], first_router)
-
-        break
         
 
 def add_edges_info_to_database(node, router_propagation_info):
     database_info = []
-    nodes = []
     for entry in router_propagation_info:
         database_info.append([node, entry[0], entry[1]])
         database_info.append([entry[0], node, entry[1]])
