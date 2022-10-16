@@ -4,8 +4,8 @@ import graph_creator
 import floyd_warshall
 import johnson
 
-NUM_OF_NETWORKS = 10
-NUM_OF_ROUTERS = 30
+NUM_OF_NETWORKS = 20
+NUM_OF_ROUTERS = 50
 MIN_NUM_OF_INTERFACES = 1
 MAX_NUM_OF_INTERFACES = 2
 NUM_OF_ITERATIONS = 200

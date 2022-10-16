@@ -1,0 +1,116 @@
+[
+  {
+    "id": 890730384,
+    "name": "r1",
+    "broadcastedNetworks": [
+      {
+        "address": "192.168.1.0",
+        "bandwidth": "2"
+      },
+      {
+        "address": "192.168.6.0",
+        "bandwidth": "8"
+      }
+    ]
+  },
+  {
+    "id": 469075949,
+    "name": "r2",
+    "broadcastedNetworks": [
+      {
+        "address": "192.168.2.0",
+        "bandwidth": "1"
+      },
+      {
+        "address": "192.168.4.0",
+        "bandwidth": "11"
+      }
+    ]
+  },
+  {
+    "id": 43677162,
+    "name": "r3",
+    "broadcastedNetworks": [
+      {
+        "address": "192.168.1.0",
+        "bandwidth": "2"
+      },
+      {
+        "address": "192.168.2.0",
+        "bandwidth": "1"
+      }
+    ]
+  },
+  {
+    "id": 751125538,
+    "name": "r4",
+    "broadcastedNetworks": [
+      {
+        "address": "192.168.3.0",
+        "bandwidth": "7"
+      },
+      {
+        "address": "192.168.4.0",
+        "bandwidth": "11"
+      },
+      {
+        "address": "192.168.9.0",
+        "bandwidth": "3"
+      }
+    ]
+  },
+  {
+    "id": 600994010,
+    "name": "r5",
+    "broadcastedNetworks": [
+      {
+        "address": "192.168.5.0",
+        "bandwidth": "5"
+      },
+      {
+        "address": "192.168.8.0",
+        "bandwidth": "4"
+      }
+    ]
+  },
+  {
+    "id": 504544744,
+    "name": "r6",
+    "broadcastedNetworks": [
+      {
+        "address": "192.168.6.0",
+        "bandwidth": "8"
+      },
+      {
+        "address": "192.168.7.0",
+        "bandwidth": "6"
+      },
+      {
+        "address": "192.168.8.0",
+        "bandwidth": "4"
+      },
+      {
+        "address": "192.168.9.0",
+        "bandwidth": "3"
+      }
+    ]
+  },
+  {
+    "id": 504544744,
+    "name": "r7",
+    "broadcastedNetworks": [
+      {
+        "address": "192.168.3.0",
+        "bandwidth": "7"
+      },
+      {
+        "address": "192.168.5.0",
+        "bandwidth": "5"
+      },
+      {
+        "address": "192.168.7.0",
+        "bandwidth": "6"
+      }
+    ]
+  }
+]
