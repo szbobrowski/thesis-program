@@ -4,11 +4,11 @@ import graph_creator
 import bellman_ford
 import dijkstra
 
-NUM_OF_NETWORKS = 25
-NUM_OF_ROUTERS = 80
-MIN_NUM_OF_INTERFACES = 3
-MAX_NUM_OF_INTERFACES = 4
-NUM_OF_ITERATIONS = 200
+NUM_OF_NETWORKS = 12
+NUM_OF_ROUTERS = 50
+MIN_NUM_OF_INTERFACES = 1
+MAX_NUM_OF_INTERFACES = 2
+NUM_OF_ITERATIONS = 500
 
 def main():
     bellman_ford_execution_time, dijkstra_execution_time = compare()

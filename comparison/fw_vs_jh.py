@@ -4,17 +4,17 @@ import graph_creator
 import floyd_warshall
 import johnson
 
-NUM_OF_NETWORKS = 20
-NUM_OF_ROUTERS = 50
+NUM_OF_NETWORKS = 8
+NUM_OF_ROUTERS = 30
 MIN_NUM_OF_INTERFACES = 1
 MAX_NUM_OF_INTERFACES = 2
-NUM_OF_ITERATIONS = 200
+NUM_OF_ITERATIONS = 400
 
 def main():
     floyd_warshall_execution_time, johnson_execution_time = compare()
 
-    print('floyd-warshall ', floyd_warshall_execution_time)
-    print('johnson ', johnson_execution_time)
+    print('floyd-warshall', round(floyd_warshall_execution_time*100, 4))
+    print('johnson', round(johnson_execution_time*100, 4))
 
     print('floyd-warshall is faster', round(johnson_execution_time/floyd_warshall_execution_time, 2), ' times')
 

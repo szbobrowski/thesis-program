@@ -12,10 +12,10 @@ def main(vertices, edges, source_vertex):
     vertices_with_calculated_distances = calculate_distances(full_vertices)
     vertices_paths = discover_paths(vertices_with_calculated_distances, source_vertex)
 
-    # print('source', source_vertex)
-    # print('distances', vertices_with_calculated_distances)
-    # print('paths', vertices_paths)
-    # print('------------------------------------------------------------------\n')
+    print('source', source_vertex)
+    print('distances', vertices_with_calculated_distances)
+    print('paths', vertices_paths)
+    print('------------------------------------------------------------------\n')
 
 def set_initial_distances(source_vertex, vertices):
     vertices_with_distances = []

@@ -32,8 +32,9 @@ def run_link_state(neighbors_list):
             
             dijkstra.main(databases[second_router][0], databases[second_router][1], second_router)
 
-    
-    print(databases['r1'])
+    # for router in databases:
+    #     print(databases[router])
+    #     print('-----------------------------------\n')
         
 
 def add_edges_info_to_database(node, router_propagation_info):
