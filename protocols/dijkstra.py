@@ -3,19 +3,22 @@ from traceback import print_tb
 sys.path.insert(1, '../data')
 
 def main(vertices, edges, source_vertex):
+    # print(source_vertex)
     # print(vertices)
     # print(edges)
-    # print(source_vertex)
+    # print('------------------------------------------------------------------\n')
+    
     vertices_with_distances = set_initial_distances(source_vertex, vertices)
     vertices_with_successors = determine_successors(vertices, edges)
     full_vertices = merge_distances_and_successors(vertices_with_distances, vertices_with_successors)
     vertices_with_calculated_distances = calculate_distances(full_vertices)
     vertices_paths = discover_paths(vertices_with_calculated_distances, source_vertex)
 
-    print('source', source_vertex)
-    print('distances', vertices_with_calculated_distances)
-    print('paths', vertices_paths)
-    print('------------------------------------------------------------------\n')
+    # print('source', source_vertex)
+    # print('distances', vertices_with_calculated_distances)
+    # print('paths', vertices_paths)
+    # print('------------------------------------------------------------------\n')
+
 
 def set_initial_distances(source_vertex, vertices):
     vertices_with_distances = []
@@ -25,6 +28,7 @@ def set_initial_distances(source_vertex, vertices):
             vertices_with_distances.append([vertex, 1000])
 
     return vertices_with_distances
+
 
 def determine_successors(vertices, edges):
     vertices_with_successors = []
@@ -38,12 +42,6 @@ def determine_successors(vertices, edges):
 
     return vertices_with_successors
 
-# def merge_distances_and_successors(vertices_with_distances, vertices_with_successors):
-#     full_vertices = {}
-#     for dist_vertex, suc_vertex in zip(vertices_with_distances, vertices_with_successors):
-#         full_vertices[dist_vertex[0]] = {'distance': dist_vertex[1], 'successors': suc_vertex[1]}
-    
-#     return full_vertices
 
 def merge_distances_and_successors(vertices_with_distances, vertices_with_successors):
     full_vertices = {}
@@ -53,6 +51,7 @@ def merge_distances_and_successors(vertices_with_distances, vertices_with_succes
                 full_vertices[dist_vertex[0]] = {'distance': dist_vertex[1], 'successors': suc_vertex[1]}
     
     return full_vertices
+
 
 def calculate_distances(full_vertices):
     visited, unvisited = prepare_initial_lists(full_vertices)
@@ -88,6 +87,7 @@ def prepare_initial_lists(full_vertices):
 
     return visited, unvisited
 
+
 def find_vertex_with_min_dist(full_vertices, visited):
     min_dist = 2000
     for vertex in full_vertices:
@@ -98,6 +98,7 @@ def find_vertex_with_min_dist(full_vertices, visited):
             min_vertex = vertex
 
     return min_vertex
+    
 
 def discover_paths(vertices_with_calculated_distances, source_vertex):
     vertices_paths = []
