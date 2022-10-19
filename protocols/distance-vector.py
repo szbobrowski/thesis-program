@@ -1,6 +1,4 @@
-from asyncio import constants
 import json
-from platform import node
 import bellman_ford
 
 def main():
@@ -18,27 +16,33 @@ def run_distance_vector(neighbors_list):
         nodes = uniquify_list(create_initial_vertices_info(router, neighbors_list[router]))
         connections = (create_initial_connections_info(router, neighbors_list[router]))
         connections = calculate_best_connections(nodes, connections, router)
+        next_hops = {}
 
-        routing_tables[router] = [neighbors, nodes, connections]
+        routing_tables[router] = [neighbors, nodes, connections, next_hops]
 
 
     for router in routing_tables:
         for neighbor in routing_tables[router][0]:
-            update_connections(neighbor[0], neighbor[1], routing_tables[neighbor[0]][2], routing_tables[router][2])
+            update_connections(neighbor[0], neighbor[1], routing_tables[neighbor[0]][2], routing_tables[router][2], routing_tables[neighbor[0]][3])
             routing_tables[neighbor[0]][1] = update_nodes(routing_tables[neighbor[0]][1], routing_tables[router][1])
             routing_tables[neighbor[0]][2] = calculate_best_connections(routing_tables[neighbor[0]][1], routing_tables[neighbor[0]][2], neighbor[0])
 
-    print(routing_tables['r1'])
+    # print(routing_tables['r1'])
             
 
 
-def update_connections(node, cost, existing_connections, offered_connections):
+def update_connections(node, cost, existing_connections, offered_connections, next_hops):
     destinations = extract_destinations(existing_connections)
     for offered_connection in offered_connections:
         if offered_connection[1] in destinations:
-            pass
+            for existing_connection in existing_connections:
+                if existing_connection[1] == offered_connection[1]:
+                    if existing_connection[2] > (offered_connection[2] + cost):
+                        existing_connections.append([node, offered_connection[1], (offered_connection[2] + cost)])
+                        next_hops[offered_connection[1]] = offered_connection[0]
         else:
             existing_connections.append([node, offered_connection[1], (offered_connection[2] + cost)])
+            next_hops[offered_connection[1]] = offered_connection[0]
 
 def update_nodes(known_nodes, new_nodes):
     return uniquify_list(known_nodes + new_nodes)
