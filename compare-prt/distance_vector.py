@@ -1,5 +1,13 @@
+from copy import deepcopy
 import json
+from pickle import FALSE
+from sys import getsizeof
+import time
+from traceback import print_tb
+from unittest import skip
 import bellman_ford
+
+CONVERGENCE_ACHIEVED = False
 
 def main():
     data = read_data_from_file()
@@ -9,6 +17,11 @@ def main():
 
 
 def run_distance_vector(neighbors_list):
+    propagation_time = 0
+    calculation_time = 0
+    overall_time = 0
+    overall_data_sent = 0
+
     routing_tables = {}
 
     for router in neighbors_list:
@@ -18,18 +31,57 @@ def run_distance_vector(neighbors_list):
         connections = calculate_best_connections(nodes, connections, router)
         next_hops = {}
 
-        routing_tables[router] = [neighbors, nodes, connections, next_hops]
+        convergence = False
+        routing_tables[router] = [neighbors, nodes, connections, next_hops, convergence]
 
+    counter = 0
+    while (not convergence_reached(routing_tables)):
+        propagation_time += 300
+        for router in routing_tables:
+            if ((len(routing_tables[router][0])) == 0):
+                routing_tables[router][4] = True
+                continue
+            for neighbor in routing_tables[router][0]:
+                info_before_update = deepcopy(routing_tables[neighbor[0]])
 
+                start = time.time()
+                update_connections(neighbor[0], neighbor[1], routing_tables[neighbor[0]][2], routing_tables[router][2], routing_tables[neighbor[0]][3])
+                routing_tables[neighbor[0]][1] = update_nodes(routing_tables[neighbor[0]][1], routing_tables[router][1])
+                routing_tables[neighbor[0]][2] = calculate_best_connections(routing_tables[neighbor[0]][1], routing_tables[neighbor[0]][2], neighbor[0])
+                end = time.time()
+                calculation_time += (end - start)*100
+                overall_data_sent += (getsizeof(str(routing_tables[router][2])) * len(routing_tables[router][0]))
+
+                info_after_update = deepcopy(routing_tables[neighbor[0]])
+                routing_tables[neighbor[0]][4] = (not (has_routing_table_changed(info_before_update, info_after_update)))
+
+    overall_time = propagation_time + calculation_time
+    distance_vector_statistics = [overall_time, overall_data_sent]
+
+    return distance_vector_statistics
+    
+
+def convergence_reached(routing_tables):
     for router in routing_tables:
-        for neighbor in routing_tables[router][0]:
-            update_connections(neighbor[0], neighbor[1], routing_tables[neighbor[0]][2], routing_tables[router][2], routing_tables[neighbor[0]][3])
-            routing_tables[neighbor[0]][1] = update_nodes(routing_tables[neighbor[0]][1], routing_tables[router][1])
-            routing_tables[neighbor[0]][2] = calculate_best_connections(routing_tables[neighbor[0]][1], routing_tables[neighbor[0]][2], neighbor[0])
-
-    # print(routing_tables['r1'])
+        if (not routing_tables[router][4]):
+            return False
             
+    return True
 
+
+def has_routing_table_changed(info_before_update, info_after_update):
+    info_before_update[2].sort()
+    info_after_update[2].sort()
+
+    if len(info_before_update[2]) != len(info_after_update[2]):
+        return True
+
+    for i in range(len(info_before_update[2])):
+        if (info_before_update[2][i] != info_after_update[2][i]):
+            return True
+
+    return False
+            
 
 def update_connections(node, cost, existing_connections, offered_connections, next_hops):
     destinations = extract_destinations(existing_connections)
@@ -40,6 +92,8 @@ def update_connections(node, cost, existing_connections, offered_connections, ne
                     if existing_connection[2] > (offered_connection[2] + cost):
                         existing_connections.append([node, offered_connection[1], (offered_connection[2] + cost)])
                         next_hops[offered_connection[1]] = offered_connection[0]
+                    elif (not (existing_connection[1] in next_hops)):
+                        next_hops[existing_connection[1]] = existing_connection[0]
         else:
             existing_connections.append([node, offered_connection[1], (offered_connection[2] + cost)])
             next_hops[offered_connection[1]] = offered_connection[0]
@@ -123,7 +177,7 @@ def pair_networks(first_router_networks, second_router_networks):
 
 
 def read_data_from_file():
-    with open('../data/sample2.json') as file:
+    with open('../data/routers.json') as file:
         data = json.load(file)
 
     return data

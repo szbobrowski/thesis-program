@@ -33,7 +33,7 @@ def run_link_state(neighbors_list):
     for first_router in neighbors_list:
         nodes = []
         database_info = []
-        propagation_time += find_highest_cost_to_neighbor(neighbors_list[first_router])
+        propagation_time += (find_highest_cost_to_neighbor(neighbors_list[first_router]) / 100)
         for second_router in neighbors_list:
             if first_router == second_router:
                 continue

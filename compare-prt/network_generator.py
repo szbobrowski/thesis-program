@@ -59,3 +59,5 @@ def create_broadcasted_networks(broadcasted_networks_addresses):
 def save_results_to_file(routers):
     with open('../data/routers.json', 'w') as fout:
         json.dump(routers , fout)
+
+# main(12, 30, 2, 3)
