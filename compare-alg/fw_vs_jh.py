@@ -4,11 +4,11 @@ import graph_creator
 import floyd_warshall
 import johnson
 
-NUM_OF_NETWORKS = 8
-NUM_OF_ROUTERS = 30
-MIN_NUM_OF_INTERFACES = 1
-MAX_NUM_OF_INTERFACES = 2
-NUM_OF_ITERATIONS = 400
+NUM_OF_NETWORKS = 12
+NUM_OF_ROUTERS = 50
+MIN_NUM_OF_INTERFACES = 2
+MAX_NUM_OF_INTERFACES = 3
+NUM_OF_ITERATIONS = 200
 
 def main():
     floyd_warshall_execution_time, johnson_execution_time = compare()
