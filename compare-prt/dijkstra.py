@@ -3,21 +3,14 @@ from traceback import print_tb
 sys.path.insert(1, '../data')
 
 def main(vertices, edges, source_vertex):
-    # print(source_vertex)
-    # print(vertices)
-    # print(edges)
-    # print('------------------------------------------------------------------\n')
-    
     vertices_with_distances = set_initial_distances(source_vertex, vertices)
     vertices_with_successors = determine_successors(vertices, edges)
     full_vertices = merge_distances_and_successors(vertices_with_distances, vertices_with_successors)
     vertices_with_calculated_distances = calculate_distances(full_vertices)
     vertices_paths = discover_paths(vertices_with_calculated_distances, source_vertex)
 
-    # print('source', source_vertex)
-    # print('distances', vertices_with_calculated_distances)
-    # print('paths', vertices_paths)
-    # print('------------------------------------------------------------------\n')
+    return vertices_with_calculated_distances
+    
 
 
 def set_initial_distances(source_vertex, vertices):

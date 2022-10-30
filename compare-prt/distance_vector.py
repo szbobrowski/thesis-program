@@ -17,10 +17,13 @@ def main():
 
 
 def run_distance_vector(neighbors_list):
-    propagation_time = 0
+    propagation_time = 2
     calculation_time = 0
     overall_time = 0
     overall_data_sent = 0
+    mean_memory_usage = 0
+    num_of_packets = 0
+    mean_packet_size = 0
 
     routing_tables = {}
 
@@ -36,28 +39,37 @@ def run_distance_vector(neighbors_list):
 
     counter = 0
     while (not convergence_reached(routing_tables)):
-        propagation_time += 300
+        counter += 1
+        propagation_time += 30
         for router in routing_tables:
             if ((len(routing_tables[router][0])) == 0):
                 routing_tables[router][4] = True
                 continue
             for neighbor in routing_tables[router][0]:
-                info_before_update = deepcopy(routing_tables[neighbor[0]])
-
                 start = time.time()
+
+                info_before_update = deepcopy(routing_tables[neighbor[0]])
                 update_connections(neighbor[0], neighbor[1], routing_tables[neighbor[0]][2], routing_tables[router][2], routing_tables[neighbor[0]][3])
                 routing_tables[neighbor[0]][1] = update_nodes(routing_tables[neighbor[0]][1], routing_tables[router][1])
                 routing_tables[neighbor[0]][2] = calculate_best_connections(routing_tables[neighbor[0]][1], routing_tables[neighbor[0]][2], neighbor[0])
-                end = time.time()
-                calculation_time += (end - start)*100
-                overall_data_sent += (getsizeof(str(routing_tables[router][2])) * len(routing_tables[router][0]))
-
                 info_after_update = deepcopy(routing_tables[neighbor[0]])
                 routing_tables[neighbor[0]][4] = (not (has_routing_table_changed(info_before_update, info_after_update)))
 
-    overall_time = propagation_time + calculation_time
-    distance_vector_statistics = [overall_time, overall_data_sent]
+                end = time.time()
+                calculation_time += (end - start)*15
 
+            overall_data_sent += (getsizeof(str(routing_tables[router][2])) * len(routing_tables[router][0]))
+            num_of_packets += len(routing_tables[router][0])
+
+        if (counter == 100):
+            print('endless loop')
+            break
+
+    overall_time = propagation_time + (calculation_time / len(routing_tables))
+    mean_memory_usage = (getsizeof(str(routing_tables)) / len(routing_tables))
+    mean_packet_size = overall_data_sent / num_of_packets
+    
+    distance_vector_statistics = [overall_time, overall_data_sent, mean_memory_usage, mean_packet_size] 
     return distance_vector_statistics
     
 
@@ -188,5 +200,3 @@ def uniquify_list(the_list):
     uniquified_list = list(a_set)
 
     return uniquified_list
-
-main()

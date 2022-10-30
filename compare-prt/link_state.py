@@ -1,5 +1,4 @@
 import json
-from platform import node
 from sys import getsizeof
 import dijkstra
 import time
@@ -11,59 +10,71 @@ def main():
     run_link_state(neighbors_list)
 
 
-def run_link_state(neighbors_list):
-    propagation_time = 0
+def run_link_state(neighbors_list, num_of_networks = 20):
+    propagation_time = 2
     calculation_time = 0
     overall_time = 0
     overall_data_sent = 0
+    mean_memory_usage = 0
+    num_of_packets = 0
+    mean_packet_size = 0
 
     databases = {}
-    num_of_edges_the_lsa_travels = calculate_number_of_edges_the_lsa_travels(neighbors_list)
+    num_of_edges_the_lsa_travels = calculate_number_of_edges_the_lsa_travels(neighbors_list, num_of_networks)
 
     for router in neighbors_list:
         nodes = add_vertices_info_to_database(router, neighbors_list[router])
         database_info = add_edges_info_to_database(router, neighbors_list[router])
+        routing_table = dijkstra.main(nodes, database_info, router)
 
-        databases[router] = [nodes, database_info]
+        databases[router] = [nodes, database_info, routing_table]
         databases[router][0] = uniquify_list(databases[router][0])
         databases[router][1] = [list(x) for x in set(tuple(x) for x in databases[router][1])]
 
-        dijkstra.main(databases[router][0], databases[router][1], router)
 
     for first_router in neighbors_list:
         nodes = []
         database_info = []
-        propagation_time += (find_highest_cost_to_neighbor(neighbors_list[first_router]) / 100)
+        if (len(neighbors_list[first_router]) == 0):
+            continue
+        propagation_time += (find_highest_cost_to_neighbor(neighbors_list[first_router]) / 1000)
         for second_router in neighbors_list:
             if first_router == second_router:
                 continue
 
+            start = time.time()
+
             nodes = add_vertices_info_to_database(first_router, neighbors_list[first_router])
             database_info = add_edges_info_to_database(first_router, neighbors_list[first_router])
 
-            start = time.time()
             databases[second_router][0] += nodes
             databases[second_router][1] += database_info
             databases[second_router][0] = uniquify_list(databases[second_router][0])
             databases[second_router][1] = [list(x) for x in set(tuple(x) for x in databases[second_router][1])]
+            databases[second_router][2] = dijkstra.main(databases[second_router][0], databases[second_router][1], second_router)
 
-            dijkstra.main(databases[second_router][0], databases[second_router][1], second_router)
             end = time.time()
-            calculation_time += (end - start)*100
+            calculation_time += (end - start)*15
 
         overall_data_sent += (getsizeof(str(neighbors_list[first_router])) * num_of_edges_the_lsa_travels)
-                
-    overall_time = propagation_time + calculation_time
-    link_state_statistics = [overall_time, overall_data_sent]
+        num_of_packets += num_of_edges_the_lsa_travels
+          
+    overall_time = propagation_time + (calculation_time / len(databases))
+    mean_memory_usage = (getsizeof(str(databases)) / len(databases))
+    mean_packet_size = overall_data_sent / num_of_packets
+    
+    link_state_statistics = [overall_time, overall_data_sent, mean_memory_usage, mean_packet_size]
     return link_state_statistics
 
 
-def calculate_number_of_edges_the_lsa_travels(neighbors_list):
+def calculate_number_of_edges_the_lsa_travels(neighbors_list, num_of_networks):
     num_of_edges = 0
     for router in neighbors_list:
         num_of_edges += len(neighbors_list[router])
 
-    return int(num_of_edges / 2)
+    num_of_edges = int(num_of_edges / num_of_networks) 
+
+    return num_of_edges
     
 
 def find_highest_cost_to_neighbor(neighbors):
@@ -91,7 +102,7 @@ def add_vertices_info_to_database(node, router_propagation_info):
 
 
 def read_data_from_file():
-    with open('../data/routers.json') as file:
+    with open('../data/sample2.json') as file:
         data = json.load(file)
 
     return data
