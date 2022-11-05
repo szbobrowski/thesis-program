@@ -4,17 +4,18 @@ import graph_creator
 import bellman_ford
 import dijkstra
 
-NUM_OF_NETWORKS = 12
-NUM_OF_ROUTERS = 50
-MIN_NUM_OF_INTERFACES = 2
-MAX_NUM_OF_INTERFACES = 3
-NUM_OF_ITERATIONS = 500
+NUM_OF_NETWORKS = 42
+NUM_OF_ROUTERS = 90
+MIN_NUM_OF_INTERFACES = 3
+MAX_NUM_OF_INTERFACES = 5
+NUM_OF_ITERATIONS = 200
 
 def main():
     bellman_ford_execution_time, dijkstra_execution_time = compare()
 
-    print('bellman-ford', round(bellman_ford_execution_time*100, 4))
-    print('dijkstra', round(dijkstra_execution_time*100, 4))
+    print('--------------------\n')
+    print('bellman-ford', round(bellman_ford_execution_time*10000 / NUM_OF_ITERATIONS, 2))
+    print('dijkstra', round(dijkstra_execution_time*10000 / NUM_OF_ITERATIONS, 2))
 
     print('dijkstra is faster', round(bellman_ford_execution_time/dijkstra_execution_time, 2), ' times')
 

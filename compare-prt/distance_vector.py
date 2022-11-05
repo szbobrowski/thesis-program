@@ -1,10 +1,7 @@
 from copy import deepcopy
 import json
-from pickle import FALSE
 from sys import getsizeof
 import time
-from traceback import print_tb
-from unittest import skip
 import bellman_ford
 
 CONVERGENCE_ACHIEVED = False
@@ -54,14 +51,13 @@ def run_distance_vector(neighbors_list):
                 routing_tables[neighbor[0]][1] = update_nodes(routing_tables[neighbor[0]][1], routing_tables[router][1])
                 routing_tables[neighbor[0]][2] = calculate_best_connections(routing_tables[neighbor[0]][1], routing_tables[neighbor[0]][2], neighbor[0])
                 end = time.time()
-                calculation_time += (end - start)*100
+                calculation_time += (end - start)*30
 
                 info_after_update = deepcopy(routing_tables[neighbor[0]])
                 routing_tables[neighbor[0]][4] = (not (has_routing_table_changed(info_before_update, info_after_update)))
                 mean_calculated_data += getsizeof(str(routing_tables[neighbor[0]][1])) + getsizeof(str(routing_tables[neighbor[0]][2])) + getsizeof(str(neighbor[0])) 
 
             overall_data_sent += (getsizeof(str(routing_tables[router][2])) * len(routing_tables[router][0]))
-            
             num_of_packets += len(routing_tables[router][0])
 
         if (counter == 100):

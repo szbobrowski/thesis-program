@@ -12,13 +12,13 @@ def main():
 
 def run_link_state(neighbors_list, num_of_networks = 20):
     propagation_time = 2
-    calculation_time = 1
-    overall_time = 1
-    overall_data_sent = 1
-    mean_memory_usage = 1
-    num_of_packets = 1
-    mean_packet_size = 1
-    mean_calculated_data = 1
+    calculation_time = 0
+    overall_time = 0
+    overall_data_sent = 0
+    mean_memory_usage = 0
+    num_of_packets = 0
+    mean_packet_size = 0
+    mean_calculated_data = 0
 
     databases = {}
     num_of_edges_the_lsa_travels = calculate_number_of_edges_the_lsa_travels(neighbors_list, num_of_networks)
@@ -55,7 +55,7 @@ def run_link_state(neighbors_list, num_of_networks = 20):
             databases[second_router][2] = dijkstra.main(databases[second_router][0], databases[second_router][1], second_router)
 
             end = time.time()
-            calculation_time += (end - start)*100
+            calculation_time += (end - start)*30
 
             mean_calculated_data += getsizeof(str(databases[second_router][0])) + getsizeof(str(databases[second_router][1])) + getsizeof(str(second_router)) 
 

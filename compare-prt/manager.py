@@ -3,28 +3,28 @@ import link_state
 import distance_vector
 import network_generator
 
-NUM_OF_NETWORKS = 8
-NUM_OF_ROUTERS = 15
+NUM_OF_NETWORKS = 74
+NUM_OF_ROUTERS = 120
 MIN_NUM_OF_INTERFACES = 2
 MAX_NUM_OF_INTERFACES = 3
-NUM_OF_ITERATIONS = 20
+NUM_OF_ITERATIONS = 2
 
 def main():
     link_state_statistics, distance_vector_statistics = compare()
+
+    print('--------------------\n')
     print('link-state convergence time', round(link_state_statistics[0] / NUM_OF_ITERATIONS, 2))
     print('link-state bandwidth usage in kilobytes', round((link_state_statistics[1] / NUM_OF_ITERATIONS) / 1000, 2))
-    print('link-state memory usage per router in kilobytes', round((link_state_statistics[2] / NUM_OF_ITERATIONS) / 1000, 2))
+    print('link-state space usage per router in kilobytes', round((link_state_statistics[2] / NUM_OF_ITERATIONS) / 1000, 2))
     print('link-state mean packet size in bytes', round((link_state_statistics[3] / NUM_OF_ITERATIONS), 2))
-    print('link-state calculation time per router', round((link_state_statistics[4] / NUM_OF_ITERATIONS), 5))
+    print('link-state calculation time per router', round((link_state_statistics[4]*100 / NUM_OF_ITERATIONS), 2))
     print('link-state data calculated per router in kilobytes', round((link_state_statistics[5] / NUM_OF_ITERATIONS) / 1000, 2))
-
-    print('\n--------------------\n')
-
+    print('--------------------\n')
     print('distance-vector convergence time', round(distance_vector_statistics[0] / NUM_OF_ITERATIONS, 2))
     print('distance-vector bandwidth usage in kilobytes', round((distance_vector_statistics[1] / NUM_OF_ITERATIONS) / 1000, 2))
-    print('distance-vector memory usage per router in kilobytes', round((distance_vector_statistics[2] / NUM_OF_ITERATIONS) / 1000, 2))
+    print('distance-vector space usage per router in kilobytes', round((distance_vector_statistics[2] / NUM_OF_ITERATIONS) / 1000, 2))
     print('distance-vector mean packet size in bytes', round((distance_vector_statistics[3] / NUM_OF_ITERATIONS), 2))
-    print('distance-vector calculation time per router', round((distance_vector_statistics[4] / NUM_OF_ITERATIONS), 5))
+    print('distance-vector calculation time per router', round((distance_vector_statistics[4]*100 / NUM_OF_ITERATIONS), 2))
     print('distance-vector data calculated per router in kilobytes', round((distance_vector_statistics[5] / NUM_OF_ITERATIONS) / 1000, 2))
 
 def compare():
@@ -43,6 +43,7 @@ def compare():
     distance_vector_mean_calculated_data = 0 
 
     for i in range(NUM_OF_ITERATIONS):
+        print('iteration', i)
         network_generator.main(NUM_OF_NETWORKS, NUM_OF_ROUTERS, MIN_NUM_OF_INTERFACES, MAX_NUM_OF_INTERFACES)
         data = read_data_from_file()
         
