@@ -12,12 +12,13 @@ def main():
 
 def run_link_state(neighbors_list, num_of_networks = 20):
     propagation_time = 2
-    calculation_time = 0
-    overall_time = 0
-    overall_data_sent = 0
-    mean_memory_usage = 0
-    num_of_packets = 0
-    mean_packet_size = 0
+    calculation_time = 1
+    overall_time = 1
+    overall_data_sent = 1
+    mean_memory_usage = 1
+    num_of_packets = 1
+    mean_packet_size = 1
+    mean_calculated_data = 1
 
     databases = {}
     num_of_edges_the_lsa_travels = calculate_number_of_edges_the_lsa_travels(neighbors_list, num_of_networks)
@@ -54,28 +55,45 @@ def run_link_state(neighbors_list, num_of_networks = 20):
             databases[second_router][2] = dijkstra.main(databases[second_router][0], databases[second_router][1], second_router)
 
             end = time.time()
-            calculation_time += (end - start)*15
+            calculation_time += (end - start)*100
+
+            mean_calculated_data += getsizeof(str(databases[second_router][0])) + getsizeof(str(databases[second_router][1])) + getsizeof(str(second_router)) 
 
         overall_data_sent += (getsizeof(str(neighbors_list[first_router])) * num_of_edges_the_lsa_travels)
         num_of_packets += num_of_edges_the_lsa_travels
           
-    overall_time = propagation_time + (calculation_time / len(databases))
+    calculation_time = (calculation_time / len(databases))
+    overall_time = propagation_time + calculation_time
     mean_memory_usage = (getsizeof(str(databases)) / len(databases))
     mean_packet_size = overall_data_sent / num_of_packets
+    mean_calculated_data = mean_calculated_data / len(databases)
     
-    link_state_statistics = [overall_time, overall_data_sent, mean_memory_usage, mean_packet_size]
+    link_state_statistics = [overall_time, overall_data_sent, mean_memory_usage, mean_packet_size, calculation_time, mean_calculated_data]
     return link_state_statistics
 
 
-def calculate_number_of_edges_the_lsa_travels(neighbors_list, num_of_networks):
+def calculate_number_of_edges_the_lsa_travels(neighbors_list, num_of_networks=1):
     num_of_edges = 0
+    mean_num_of_interfaces = calculate_mean_num_of_interfaces(neighbors_list)
+    divider = mean_num_of_interfaces / num_of_networks
     for router in neighbors_list:
         num_of_edges += len(neighbors_list[router])
 
-    num_of_edges = int(num_of_edges / num_of_networks) 
+    num_of_edges = int(num_of_edges / divider)
+    num_of_edges /= 2
 
     return num_of_edges
-    
+
+
+def calculate_mean_num_of_interfaces(neighbors_list):
+    num_of_all_interfaces = 0
+    for neighbor in neighbors_list:
+        num_of_all_interfaces += len(neighbors_list[neighbor])
+
+    mean_num_of_interfaces = num_of_all_interfaces / len(neighbors_list)
+
+    return mean_num_of_interfaces
+
 
 def find_highest_cost_to_neighbor(neighbors):
     highest_cost = 0

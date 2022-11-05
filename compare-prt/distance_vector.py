@@ -24,6 +24,7 @@ def run_distance_vector(neighbors_list):
     mean_memory_usage = 0
     num_of_packets = 0
     mean_packet_size = 0
+    mean_calculated_data = 0
 
     routing_tables = {}
 
@@ -46,30 +47,34 @@ def run_distance_vector(neighbors_list):
                 routing_tables[router][4] = True
                 continue
             for neighbor in routing_tables[router][0]:
-                start = time.time()
-
                 info_before_update = deepcopy(routing_tables[neighbor[0]])
+
+                start = time.time()
                 update_connections(neighbor[0], neighbor[1], routing_tables[neighbor[0]][2], routing_tables[router][2], routing_tables[neighbor[0]][3])
                 routing_tables[neighbor[0]][1] = update_nodes(routing_tables[neighbor[0]][1], routing_tables[router][1])
                 routing_tables[neighbor[0]][2] = calculate_best_connections(routing_tables[neighbor[0]][1], routing_tables[neighbor[0]][2], neighbor[0])
+                end = time.time()
+                calculation_time += (end - start)*100
+
                 info_after_update = deepcopy(routing_tables[neighbor[0]])
                 routing_tables[neighbor[0]][4] = (not (has_routing_table_changed(info_before_update, info_after_update)))
-
-                end = time.time()
-                calculation_time += (end - start)*15
+                mean_calculated_data += getsizeof(str(routing_tables[neighbor[0]][1])) + getsizeof(str(routing_tables[neighbor[0]][2])) + getsizeof(str(neighbor[0])) 
 
             overall_data_sent += (getsizeof(str(routing_tables[router][2])) * len(routing_tables[router][0]))
+            
             num_of_packets += len(routing_tables[router][0])
 
         if (counter == 100):
             print('endless loop')
             break
 
-    overall_time = propagation_time + (calculation_time / len(routing_tables))
+    calculation_time = (calculation_time / len(routing_tables))
+    overall_time = propagation_time + calculation_time
     mean_memory_usage = (getsizeof(str(routing_tables)) / len(routing_tables))
     mean_packet_size = overall_data_sent / num_of_packets
+    mean_calculated_data = mean_calculated_data /  len(routing_tables)
     
-    distance_vector_statistics = [overall_time, overall_data_sent, mean_memory_usage, mean_packet_size] 
+    distance_vector_statistics = [overall_time, overall_data_sent, mean_memory_usage, mean_packet_size, calculation_time, mean_calculated_data] 
     return distance_vector_statistics
     
 
