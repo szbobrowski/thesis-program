@@ -55,7 +55,7 @@ def run_link_state(neighbors_list, num_of_networks = 20):
             databases[second_router][2] = dijkstra.main(databases[second_router][0], databases[second_router][1], second_router)
 
             end = time.time()
-            calculation_time += (end - start)*30
+            calculation_time += (end - start)*20
 
             mean_calculated_data += getsizeof(str(databases[second_router][0])) + getsizeof(str(databases[second_router][1])) + getsizeof(str(second_router)) 
 

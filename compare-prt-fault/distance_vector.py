@@ -56,7 +56,7 @@ def run_distance_vector(neighbors_list):
         neighbors = extract_neighbors(neighbors_list[router])
         routing_tables[router][0] = neighbors
 
-    propagation_time = 240
+    propagation_time = 180
     calculation_time = 0
     overall_time = 0
     overall_data_sent = 0
@@ -65,7 +65,7 @@ def run_distance_vector(neighbors_list):
     counter = 0
     updated_routers = neighbors_of_removed_node
     while (not convergence_reached(routing_tables)):
-        propagation_time += 30
+        propagation_time += random.randint(1, 5)
         counter += 1
         for router in routing_tables:
             if ((len(routing_tables[router][0])) == 0):

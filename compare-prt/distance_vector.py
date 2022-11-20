@@ -3,6 +3,7 @@ import json
 from sys import getsizeof
 import time
 import bellman_ford
+import random
 
 CONVERGENCE_ACHIEVED = False
 
@@ -38,7 +39,8 @@ def run_distance_vector(neighbors_list):
     counter = 0
     while (not convergence_reached(routing_tables)):
         counter += 1
-        propagation_time += 30
+        propagation_time += random.randint(1, 5)
+        
         for router in routing_tables:
             if ((len(routing_tables[router][0])) == 0):
                 routing_tables[router][4] = True
@@ -51,7 +53,7 @@ def run_distance_vector(neighbors_list):
                 routing_tables[neighbor[0]][1] = update_nodes(routing_tables[neighbor[0]][1], routing_tables[router][1])
                 routing_tables[neighbor[0]][2] = calculate_best_connections(routing_tables[neighbor[0]][1], routing_tables[neighbor[0]][2], neighbor[0])
                 end = time.time()
-                calculation_time += (end - start)*30
+                calculation_time += (end - start)*20
 
                 info_after_update = deepcopy(routing_tables[neighbor[0]])
                 routing_tables[neighbor[0]][4] = (not (has_routing_table_changed(info_before_update, info_after_update)))
